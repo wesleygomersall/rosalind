@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# https://rosalind.info/problems/prot/
+# https://rosalind.info/problems/subs/
 
 import argparse
 import re
