@@ -11,16 +11,20 @@ def get_args():
 
 args = get_args()
 
+sequence = ""
+first_entry = True
+
 with open(args.input, 'r') as fin: 
     for line_num, line in enumerate(fin): 
-        if not line.startswith('>'):
-            if line_num == 1: 
-                a = [0] * len(line.strip())
-                c = [0] * len(line.strip())
-                g = [0] * len(line.strip())
-                t = [0] * len(line.strip())
-            for i in range(len(line.strip())):
-                match line[i]:
+        if line.startswith('>') and not line_num == 0:
+            if first_entry: 
+                a = [0] * len(sequence)
+                c = [0] * len(sequence)
+                g = [0] * len(sequence)
+                t = [0] * len(sequence)
+                first_entry = False
+            for i in range(len(sequence)):
+                match sequence[i]:
                     case "A":
                         a[i] += 1
                     case "C":
@@ -29,6 +33,19 @@ with open(args.input, 'r') as fin:
                         g[i] += 1
                     case "T":
                         t[i] += 1
+            sequence = ""
+        if not line.startswith('>'):
+            sequence = sequence + line.strip()
+    for i in range(len(sequence)):
+        match sequence[i]:
+            case "A":
+                a[i] += 1
+            case "C":
+                c[i] += 1
+            case "G":
+                g[i] += 1
+            case "T":
+                t[i] += 1
 
 consensus = ""
 for i in range(len(a)):
