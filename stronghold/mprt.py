@@ -2,8 +2,12 @@
 
 # https://rosalind.info/problems/mprt/
 
-from parsefasta import get_args
-import json
+# get fasta for this file with mprt.sh
+
+import sys
+sys.path.append("..") 
+
+import parsefasta
 
 # curl --form 'from="UniProtKB_AC-ID"' \
      # --form 'to="UniProtKB"' \
@@ -11,9 +15,9 @@ import json
      # https://rest.uniprot.org/idmapping/run
 
 def main():
-    with open(get_args().input, 'r') as fin:
-        jin = json.load(fin)
-        seq = jin['results']
+    sequences = parsefasta.parse_fasta(parsefasta.get_args().input)
+
+    print(sequences) 
 
 # The asparagine-X-serine/threonine (NXS/T) motif, 
 # where X is any amino acid except proline, 
