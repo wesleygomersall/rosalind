@@ -6,7 +6,8 @@ import argparse
 
 def get_args():
     parser = argparse.ArgumentParser(description="")
-    parser.add_argument("-i", "--input", help="Input file name", type=str, required=True) 
+    parser.add_argument("-i", "--input", help="Input file name", 
+                        type=str, required=True) 
     return parser.parse_args()
 
 args = get_args()
@@ -22,7 +23,7 @@ class FastaRec:
     def left_k(self, another, k):
         if self.seq == another.seq: pass
         elif self.seq[(self.len-k) : self.len] == another.seq[0:k]: 
-            return f"{self.head} {another.head}"
+            return (self.head, another.head)
 
 def adjacency(sequences: list, k): 
     adj = set()
@@ -31,7 +32,7 @@ def adjacency(sequences: list, k):
             left = record.left_k(second_record, k)
             if left is not None: adj.add(left)
     for edge in adj: 
-        print(edge)
+        print(f"{edge[0]} {edge[1]}")
 
 sequences: list = []
 
@@ -45,5 +46,7 @@ with open(args.input, 'r') as fin:
             seq = "" 
         else: 
             seq = seq + line.strip()
+    newseq = FastaRec(name, seq)
+    sequences.append(newseq) 
 
 adjacency(sequences, K)
