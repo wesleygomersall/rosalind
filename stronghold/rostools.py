@@ -38,14 +38,14 @@ class BioSequence:
 
     Attributes:
         id (str):           Sequence ID
-        sequence (str):     Sequence
+        seq (str):          Sequence
 
     Method(s):
         length (int):       Returns the length of `seq`
     '''
 
     def __init__(self, header: str, sequence: str):
-        self.head = header.strip('>')
+        self.id = header.strip('>')
         self.seq = sequence
 
     def length(self) -> int: 
