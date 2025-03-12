@@ -17,7 +17,7 @@ import argparse
 
 def get_args():
     parser = argparse.ArgumentParser(description="")
-    parser.add_argument("-i", "--input", help="Input fasta file path", type=str, required=True) 
+    parser.add_argument("-i", "--input", help="Input file path(s)", type=str, required=True) 
     return parser.parse_args()
 
 class FastaRec:

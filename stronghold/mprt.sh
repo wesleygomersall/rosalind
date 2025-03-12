@@ -1,10 +1,16 @@
 #!/usr/bin/bash
 
+# this script downloads protein sequences 
+# from UniProtKB using accession id.
+# https://www.uniprot.org/help/id_mapping
+
 # change the ids below
 
 curl --request POST 'https://rest.uniprot.org/idmapping/run' --form 'ids="P21802,P12345"' --form 'from="UniProtKB_AC-ID"' --form 'to="UniRef90"'
 
-# output to terminal
+# take in this output so you can regex out the jobId
+#
+# output to terminal:
 # {"jobId":"27a020f6334184c4eb382111fbcad0e848f40300"}
 
 # check the status of job
