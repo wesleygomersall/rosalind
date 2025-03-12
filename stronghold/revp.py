@@ -11,15 +11,15 @@ def revcomp(sequence: str) -> str:
     comp = ""
 
     for i in seq: 
-    match i: 
-        case "A":
-            comp = comp + "T" 
-        case "T":
-            comp = comp + "A" 
-        case "C":
-            comp = comp + "G" 
-        case "G":
-            comp = comp + "C" 
+        match i: 
+            case "A":
+                comp = comp + "T" 
+            case "T":
+                comp = comp + "A" 
+            case "C":
+                comp = comp + "G" 
+            case "G":
+                comp = comp + "C" 
     return comp[::-1]
 
 def main(args):
