@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# https://rosalind.info/problems/splc/
+
 import parsefasta as pf
 # from rostools import DNA_CODONS
 import rostools as rt
