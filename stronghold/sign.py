@@ -16,8 +16,10 @@ def main(args):
     print(len(sig_perm))
     for item in sig_perm:
         for i in range(n):
-            print(int(item[i]), end= " ")
-        print()
+            if i == n - 1: # last item gets \n
+                print(int(item[i]))
+            else:
+                print(int(item[i]), end= " ")
 
 def signed_permutation(n: int) -> set:
     myset = set()
