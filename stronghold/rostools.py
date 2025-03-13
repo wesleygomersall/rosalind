@@ -47,7 +47,8 @@ class BioSequence:
     def __init__(self, header: str, sequence: str):
         self.id = header.strip('>')
         self.seq = sequence
-
+    
+    @property
     def length(self) -> int: 
         return len(self.seq) 
 
@@ -80,6 +81,59 @@ def read_fasta(filepath: str) -> list:
         sequences.append(newseq) 
 
     return sequences
+
+def revcomp(sequence: str, dna: bool = True) -> str: 
+    '''Returns the reverse complement of a DNA string by default.
+    '''
+    compstrand = ""
+
+    if dna: complement = DNA_COMP_BASES
+    else: complement = RNA_COMP_BASES
+
+    for i in sequence:
+        compstrand = compstrand + complement[i]
+
+    # for i in sequence: 
+        # match i: 
+            # # case "A":
+                # comp = comp + "T" 
+            # case "T":
+                # comp = comp + "A" 
+            # # case "C":
+                # comp = comp + "G" 
+            # case "G":
+                # comp = comp + "C" 
+    return compstrand[::-1]
+
+def dna_palindromes(sequence: str, minimum: int, maximum: int) -> set:
+    '''Return a set of tuples containing all reverse palindromes found in 
+    DNA sequence that are `minimum` <= length <= `maximum`.
+
+    Each tuple in list is: 
+    (reverse palindrome location (1-based index), 
+     reverse palindrome length)
+    '''
+    revpals = set()
+    for i in range(len(sequence)): 
+        expand = 0
+        pal_length = 0
+
+        while True: 
+            if i - expand < 0 or i + 1 + expand > len(sequence): 
+                if minimum <= pal_length and pal_length <= maximum:
+                    revpals.add((i - expand + 2, pal_length))
+                break
+            left = sequence[i - expand:i+1] 
+            right = sequence[i + 1: i + 2 + expand]
+            right_rc = revcomp(right, True)
+            if left == right_rc:
+                pal_length = len(left + right)
+                expand += 1
+                if minimum <= pal_length and pal_length <= maximum:
+                    revpals.add((i - expand + 2, pal_length))
+            else: 
+                break
+    return revpals
 
 MONOISOTOPIC_MASS = {"A": "71.03711", "C": "103.00919",
                      "D": "115.02694", "E": "129.04259",
@@ -125,6 +179,16 @@ RNA_CODONS = {"UUU": "F",      "CUU": "L",      "AUU": "I",      "GUU": "V",
               "UGC": "C",      "CGC": "R",      "AGC": "S",      "GGC": "G",
               "UGA": "Stop",   "CGA": "R",      "AGA": "R",      "GGA": "G",
               "UGG": "W",      "CGG": "R",      "AGG": "R",      "GGG": "G"}
+
+DNA_COMP_BASES = {"A": "T", "a": "t", 
+                  "T": "A", "t": "a",
+                  "C": "G", "c": "g",
+                  "G": "C", "g": "c"}
+
+RNA_COMP_BASES = {"A": "U", "a": "u", 
+                  "U": "A", "u": "a",
+                  "C": "G", "c": "g",
+                  "G": "C", "g": "c"}
 
 if __name__ == "__main__":
     assert remove_substring("ABCDEFG", "CDE") == "ABFG"
