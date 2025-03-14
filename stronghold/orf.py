@@ -38,15 +38,15 @@ def translate_all(sequence: str) -> list:
                 protein = protein + rostools.DNA_CODONS[sequence[i:i+3]]
                 i += 3
 
-    if protein != "": proteins.append(protein) 
-
     return proteins
 
 def main(args):
     my_dna = rostools.read_fasta(args.input)[0]
 
-    print(my_dna.seq)
-    print(translate_all(my_dna.seq))
+    protset = set(translate_all(my_dna.seq))
+    protset = protset.union(set(translate_all(rostools.revcomp(my_dna.seq))))
+
+    [print(i) for i in protset]
 
     return 0
 
