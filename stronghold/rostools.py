@@ -135,6 +135,15 @@ def dna_palindromes(sequence: str, minimum: int, maximum: int) -> set:
                 break
     return revpals
 
+def print_spaced_list(some_list: list):
+    '''Prints the elements of a list out to a single line.
+    Elements are separated by a single space with no space at either end.
+    '''
+    list_copy = some_list.copy()
+    print(list_copy.pop(0), end="")
+    [print(f" {i}", end='') for i in list_copy]
+    print()
+
 MONOISOTOPIC_MASS = {"A": "71.03711", "C": "103.00919",
                      "D": "115.02694", "E": "129.04259",
                      "F": "147.06841", "G": "57.02146",
