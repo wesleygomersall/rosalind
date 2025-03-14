@@ -32,6 +32,34 @@ def translate(nuc_acids: str, dna: bool = True) -> str:
 
     return prot
 
+def translate_orf(sequence: str) -> str:
+    '''Translate DNA nuc_acid.
+    Sequence must have a start codon to find the reading frame.
+    Translates up to first stop codon encountered in seq.
+    '''
+    # to begin: empty protein str and not translating
+    protein: str = ""; translating: bool = False
+    frame = sequence[0:3]; i = 3
+    if frame == 'ATG':
+        translating = True; protein = "M"
+    if not translating: # find start codon
+        while True:
+            if i == len(sequence): break # in case there is no start codon
+            frame = frame[1:3] + sequence[i]
+            i += 1
+            if frame == "ATG":
+                translating = True; protein = "M"
+                break
+    if translating:
+        while True:
+            frame = sequence[i:i+3]
+            i += 3
+            if i > len(sequence): break
+            aminoacid = rostools.DNA_CODONS[frame] # only want the 1-letter a.a. code
+            if aminoacid == "Stop": break # do not translate past the first "Stop" codon
+            protein = protein + aminoacid
+    return protein
+
 class BioSequence:
     '''
     A biological record with a name and a sequence
