@@ -3,8 +3,6 @@
 # https://rosalind.info/problems/full/
 
 import argparse
-import heapq    
-from itertools import combinations
 
 MONOISOTOPIC_MASS = {"A": 71.03711, "C": 103.00919,
                      "D": 115.02694, "E": 129.04259,
@@ -16,22 +14,6 @@ MONOISOTOPIC_MASS = {"A": 71.03711, "C": 103.00919,
                      "R": 156.10111, "S": 87.03203,
                      "T": 101.04768, "V": 99.06841,
                      "W": 186.07931, "Y": 163.06333}
-
-def pair_element_sum(full: float, some_list: list) -> list:
-    '''For some float value given by `full` and a list of float values
-    given in `some_list`, pairs the elements of the list which roughly 
-    sum to `full` (rounded to 2 decimals).
-    Return a set of tuples which each contain a pair from `some_list`.
-    '''
-
-    pairs = set()
-    for m in combinations(some_list, 2):
-        if round(m[0] + m[1], 2) == round(full, 2):
-            if (m[0], m[1]) in pairs or (m[1], m[0]) in pairs:
-                break
-            else:
-                pairs.add((m[0], m[1]))
-    return pairs
 
 def closest_monoisotipic_mass(some_mass: float) -> str:
     '''Rounds monoisotipic masses and some_mass to nearest 0.01.
@@ -63,6 +45,7 @@ def probable_prot(parent_mass: float, betagammas: list) -> str:
         index1 = 0
         index2 = 0
         for m in bgmasses:
+            if m < bion_mass: continue
             possible_aa = closest_monoisotipic_mass(abs(bion_mass - m))
             if possible_aa != "":
                 prot = prot + possible_aa
@@ -70,18 +53,12 @@ def probable_prot(parent_mass: float, betagammas: list) -> str:
                 break
             else: index1 += 1
 
-        for m in bgmasses:
-            if round(parent_mass, 2) == round(m + bion_mass, 2):
+        for n in bgmasses:
+            if round(parent_mass, 2) == round(n + bion_mass, 2): 
+                yion_mass = n
                 break
             else: index2 += 1
 
-        if index1 < index2:
-            bgmasses.pop(index2)
-            bgmasses.pop(index1)
-        elif index2 < index1:
-            bgmasses.pop(index1)
-            bgmasses.pop(index2)
-                
     return prot
 
 def main(args):
