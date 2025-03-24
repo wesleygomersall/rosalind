@@ -44,7 +44,7 @@ def closest_monoisotipic_mass(some_mass: float) -> str:
             return aa 
     return ""
 
-def myfunction(parent_mass: float, betagammas: list) -> str:
+def probable_prot(parent_mass: float, betagammas: list) -> str:
     n = int(len(betagammas) / 2 - 1) # peptide length n 
     prot: str = ""
     coordinates = []
@@ -59,12 +59,29 @@ def myfunction(parent_mass: float, betagammas: list) -> str:
     yion_mass = bgmasses.pop(-1)
     coordinates.append((bion_mass, yion_mass)) # first bion-yion pair
 
-    for m in bgmasses:
-        possible_aa = closest_monoisotipic_mass(abs(bion_mass - m))
-        if possible_aa != "":
-            prot = prot + possible_aa
-            bion_mass = m
+    for aanumber in range(n):
+        index1 = 0
+        index2 = 0
+        for m in bgmasses:
+            possible_aa = closest_monoisotipic_mass(abs(bion_mass - m))
+            if possible_aa != "":
+                prot = prot + possible_aa
+                bion_mass = m
+                break
+            else: index1 += 1
 
+        for m in bgmasses:
+            if round(parent_mass, 2) == round(m + bion_mass, 2):
+                break
+            else: index2 += 1
+
+        if index1 < index2:
+            bgmasses.pop(index2)
+            bgmasses.pop(index1)
+        elif index2 < index1:
+            bgmasses.pop(index1)
+            bgmasses.pop(index2)
+                
     return prot
 
 def main(args):
@@ -73,8 +90,7 @@ def main(args):
         for line in fin:
             masses.append(float(line.strip()))
     full_mass = masses.pop(0)
-    protein = myfunction(full_mass, masses)
-    print(protein)
+    print(probable_prot(full_mass, masses))
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="")
